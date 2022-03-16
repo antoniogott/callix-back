@@ -1,0 +1,22 @@
+{
+  "name": "callix-back",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "live": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Antonio Gottsfritz",
+  "license": "MIT",
+  "dependencies": {
+    "fastify": "^3.27.4",
+    "fetch": "^1.1.0",
+    "node": "^17.7.1",
+    "node-fetch": "^2.6.7"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
