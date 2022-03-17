@@ -1,9 +1,12 @@
 const fastify = require('fastify')({
     logger: true
 });
+const fastifyCors = require('fastify-cors');
 const fetch = require('node-fetch');
 
 const SPACEX_URL = 'https://api.spacexdata.com/v4';
+
+fastify.register(fastifyCors);
 
 fastify.get('/latest', async function (request, reply) {
     const response = await fetch(`${SPACEX_URL}/launches/latest`);
@@ -38,7 +41,7 @@ fastify.listen(3001, function (err, address) {
 });
 
 class Launch {
-    constructor (data) {
+    constructor(data) {
         this.id = data.id;
         this.name = data.name;
         this.details = data.details;
