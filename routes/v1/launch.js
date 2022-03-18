@@ -6,12 +6,16 @@ module.exports = function (fastify, opts, done) {
     fastify.get('/latest', async function (request, reply) {
         const response = await fetch(`${SPACEX_URL}/launches/latest`);
         const result = new Launch(await response.json());
+        const rocket = await fetch(`${SPACEX_URL}/rockets/${result.rocketId}`);
+        result.rocket = new Rocket(await rocket.json());
         reply.send(result);
     });
 
     fastify.get('/next', async function (request, reply) {
         const response = await fetch(`${SPACEX_URL}/launches/next`);
         const result = new Launch(await response.json());
+        const rocket = await fetch(`${SPACEX_URL}/rockets/${result.rocketId}`);
+        result.rocket = new Rocket(await rocket.json());
         reply.send(result);
     });
 
@@ -30,6 +34,8 @@ module.exports = function (fastify, opts, done) {
     fastify.get('/:id', async function (request, reply) {
         const response = await fetch(`${SPACEX_URL}/launches/${request.params.id}`);
         const result = new Launch(await response.json());
+        const rocket = await fetch(`${SPACEX_URL}/rockets/${result.rocketId}`);
+        result.rocket = new Rocket(await rocket.json());
         reply.send(result);
     });
 
@@ -42,12 +48,19 @@ class Launch {
         this.name = data.name;
         this.details = data.details;
         this.success = data.success;
-        this.rocket = data.rocket;
+        this.rocketId = data.rocket;
+        this.rocket = undefined;
         this.date_utc = data.date_utc;
-        this.imgs = {
-            patch: data.links.patch.small,
-            gallery: data.links.flickr.original
-        };
+        this.patch = data.links.patch.small;
+        this.imgs = data.links.flickr.original;
         this.youtube_id = data.links.youtube_id;
+    }
+}
+
+class Rocket {
+    constructor(data) {
+        this.name = data.name;
+        this.wikipedia = data.wikipedia;
+        this.imgs = data.flickr_images;
     }
 }
